@@ -37,7 +37,7 @@ class AssetAdminOpen extends LeftAndMain
 
     private static string $menu_icon_class = 'font-icon-image';
 
-    private static string $tree_class = Folder::class;
+    private static string $model_class = Folder::class;
 
     private static array $url_handlers = [
         'GET api/read/$ID!' => 'apiRead',
