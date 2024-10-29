@@ -8,7 +8,7 @@ use SilverStripe\Assets\Shortcodes\FileLink;
 use SilverStripe\Control\Director;
 use SilverStripe\Model\List\ArrayList;
 use SilverStripe\Model\List\SS_List;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\Versioned\Mode\Versioned;
 use SilverStripe\Versioned\DataDifferencer;
 use SilverStripe\Core\Extension;
 

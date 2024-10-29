@@ -11,7 +11,7 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Model\List\ArrayList;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\Versioned\Mode\Versioned;
 use SilverStripe\AssetAdmin\Controller\AssetAdminFile;
 use stdClass;
 use SilverStripe\ORM\DataList;

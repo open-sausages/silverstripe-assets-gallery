@@ -17,8 +17,8 @@ use SilverStripe\Forms\RequiredFields;
 use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\Forms\TextField;
-use SilverStripe\Versioned\RecursivePublishable;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\Versioned\Staged\RecursivePublishable;
+use SilverStripe\Versioned\Mode\Versioned;
 
 class FileFormFactory extends AssetFormFactory
 {

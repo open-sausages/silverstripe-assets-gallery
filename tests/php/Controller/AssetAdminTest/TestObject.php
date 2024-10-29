@@ -4,7 +4,7 @@ namespace SilverStripe\AssetAdmin\Tests\Controller\AssetAdminTest;
 
 use SilverStripe\Assets\File;
 use SilverStripe\Dev\TestOnly;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\Versioned\Mode\Versioned;
 use SilverStripe\AssetAdmin\Tests\Controller\AssetAdminTest\TestFile;
 
 class TestObject extends File implements TestOnly

@@ -16,7 +16,7 @@ use SilverStripe\Control\Director;
 use SilverStripe\Control\Session;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Subsites\Extensions\FolderFormFactoryExtension;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\Versioned\Mode\Versioned;
 use SilverStripe\Security\SecurityToken;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\AssetAdmin\Tests\Controller\AssetAdminTest\FilesInUseFileExtension;

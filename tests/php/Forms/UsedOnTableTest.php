@@ -9,7 +9,7 @@ use SilverStripe\Assets\Folder;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\Versioned\Mode\Versioned;
 
 class UsedOnTableTest extends SapphireTest
 {
