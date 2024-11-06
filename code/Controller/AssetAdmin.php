@@ -62,10 +62,7 @@ class AssetAdmin extends AssetAdminOpen implements PermissionProvider
 
     private static $menu_icon_class = 'font-icon-image';
 
-    /**
-     * @deprecated 5.4.0 Will be renamed to model_class
-     */
-    private static $tree_class = Folder::class;
+    private static $model_class = Folder::class;
 
     private static $url_handlers = [
         // Legacy redirect for SS3-style detail view
