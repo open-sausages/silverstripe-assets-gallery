@@ -7,4 +7,4 @@
         </div>
     <% end_if %>
 </div>
-<input $AttributesHTML <% include SilverStripe/Forms/AriaAttributes %> />
+<input $AttributesHTML $SchemaAttributesHtml <% include SilverStripe/Forms/AriaAttributes %> />

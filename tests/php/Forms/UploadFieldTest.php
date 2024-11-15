@@ -88,10 +88,29 @@ class UploadFieldTest extends SapphireTest
         Form::create($admin, 'MyForm', FieldList::create($field), FieldList::create());
 
         $attributes = $field->getAttributes();
+        $this->assertSame('entwine-uploadfield uploadfield myfield', $attributes['class']);
+        $this->assertSame('file', $attributes['type']);
+        $this->assertSame(false, $attributes['multiple']);
+        $this->assertSame('Form_MyForm_MyField', $attributes['id']);
+    }
+
+    public function testSchemaInRenderedField(): void
+    {
+        $field = new UploadField('MyField');
+        $field->addExtraClass('myfield');
+        $field->setIsMultiUpload(false);
+        $field->setFolderName('/');
+        /** @var Image $image */
+        $image = $this->objFromFixture(Image::class, 'image1');
+        $field->setItems(new ArrayList([$image]));
+        $admin = AssetAdmin::create();
+        Form::create($admin, 'MyForm', FieldList::create($field), FieldList::create());
+
         $schema = [
             'name' => 'MyField',
             'id' => 'Form_MyForm_MyField',
             'type' => 'file',
+            'schemaType' => 'Custom',
             'component' => 'UploadField',
             'holderId' => 'Form_MyForm_MyField_Holder',
             'title' => 'My field',
@@ -102,10 +121,13 @@ class UploadFieldTest extends SapphireTest
             'leftTitle' => null,
             'readOnly' => false,
             'disabled' => false,
-            'autoFocus' => false,
             'customValidationMessage' => '',
             'validation' => [],
-            'attributes' => [],
+            'attributes' => [
+                'class' => 'entwine-uploadfield uploadfield myfield',
+                'multiple' => false,
+            ],
+            'autoFocus' => false,
             'data' => [
                 'endpoints' => [
                     'createFile' =>  [
@@ -114,14 +136,13 @@ class UploadFieldTest extends SapphireTest
                         'payloadFormat' => 'urlencoded',
                     ],
                 ],
-                'multi' => false,
-                'parentid' => 0,
                 'maxFilesize' => $field->getAllowedMaxFileSize() / 1024 / 1024,
                 'maxFiles' => null,
+                'multi' => false,
+                'parentid' => 0,
                 'canUpload' => true,
                 'canAttach' => true,
             ],
-            'schemaType' => 'Custom'
         ];
         $state = [
             'name' => 'MyField',
@@ -132,13 +153,10 @@ class UploadFieldTest extends SapphireTest
                 'files' => [ $admin->getMinimalistObjectFromData($image) ],
             ],
         ];
-        $this->assertSame('entwine-uploadfield uploadfield myfield', $attributes['class']);
-        $this->assertSame('file', $attributes['type']);
-        $this->assertSame(false, $attributes['multiple']);
-        $this->assertSame('Form_MyForm_MyField', $attributes['id']);
 
         // Check schema / state are encoded in this field
-        $this->assertEquals($schema, json_decode($attributes['data-schema'] ?? '', true));
-        $this->assertEquals($state, json_decode($attributes['data-state'] ?? '', true));
+        $html = $field->Field();
+        $this->assertStringContainsString(htmlspecialchars(json_encode($schema)), $html);
+        $this->assertStringContainsString(htmlspecialchars(json_encode($state)), $html);
     }
 }
