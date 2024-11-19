@@ -4,6 +4,7 @@ namespace SilverStripe\AssetAdmin\Extensions;
 
 use Embed\Http\NetworkException;
 use Embed\Http\RequestException;
+use SilverStripe\Admin\FormSchemaController;
 use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Admin\ModalController;
 use SilverStripe\AssetAdmin\Forms\RemoteFileFormFactory;
@@ -36,7 +37,7 @@ class RemoteFileModalExtension extends Extension
      */
     protected function getRequest()
     {
-        return $this->getOwner()->getController()->getRequest();
+        return $this->getOwner()->getRequest();
     }
 
     /**
@@ -119,7 +120,7 @@ class RemoteFileModalExtension extends Extension
      */
     protected function getSchemaResponse($schemaID, $form = null, ValidationResult $errors = null, $extraData = [])
     {
-        $parts = $this->getRequest()->getHeader(LeftAndMain::SCHEMA_HEADER);
+        $parts = $this->getRequest()->getHeader(FormSchemaController::SCHEMA_HEADER);
         $data = $this
             ->getFormSchema()
             ->getMultipartSchema($parts, $schemaID, $form, $errors);

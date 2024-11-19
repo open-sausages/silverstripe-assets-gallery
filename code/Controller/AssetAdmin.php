@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use SilverStripe\Admin\CMSBatchActionHandler;
 use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Admin\LeftAndMainFormRequestHandler;
+use SilverStripe\Admin\ModalController;
 use SilverStripe\AssetAdmin\BatchAction\DeleteAssets;
 use SilverStripe\AssetAdmin\Forms\AssetFormFactory;
 use SilverStripe\AssetAdmin\Forms\FileFormFactory;
@@ -212,6 +213,7 @@ class AssetAdmin extends AssetAdminOpen implements PermissionProvider
         $validator = $this->getUpload()->getValidator();
 
         $parentClientConfig = parent::getClientConfig();
+        $modalController = ModalController::singleton();
         return array_merge($parentClientConfig, [
             'reactRouter' => true,
             'bustCache' => static::config()->get('bust_cache'),
@@ -282,12 +284,10 @@ class AssetAdmin extends AssetAdminOpen implements PermissionProvider
                     'schemaUrl' => $this->Link('schema/fileInsertForm')
                 ],
                 'remoteEditForm' => [
-                    'schemaUrl' => LeftAndMain::singleton()
-                        ->Link('Modals/remoteEditFormSchema'),
+                    'schemaUrl' => $modalController->Link('remoteEditFormSchema'),
                 ],
                 'remoteCreateForm' => [
-                    'schemaUrl' => LeftAndMain::singleton()
-                        ->Link('methodSchema/Modals/remoteCreateForm')
+                    'schemaUrl' => $modalController->Link('schema/remoteCreateForm')
                 ],
                 'fileSelectForm' => [
                     'schemaUrl' => $this->Link('schema/fileSelectForm')
