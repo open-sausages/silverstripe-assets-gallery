@@ -3,7 +3,6 @@
 namespace SilverStripe\AssetAdmin\Tests\Forms;
 
 use SilverStripe\AssetAdmin\Controller\AssetAdmin;
-use SilverStripe\AssetAdmin\Extensions\CampaignAdminExtension;
 use SilverStripe\AssetAdmin\Forms\FileFormFactory;
 use SilverStripe\AssetAdmin\Forms\FolderFormFactory;
 use SilverStripe\AssetAdmin\Forms\ImageFormFactory;
@@ -52,9 +51,6 @@ class FileFormBuilderTest extends SapphireTest
 
     public function testEditFileForm()
     {
-        // Ensure campaign-admin extension is not applied!
-        Config::modify()->remove(FileFormFactory::class, 'extensions');
-
         $this->logInWithPermission('ADMIN');
 
         $file = $this->objFromFixture(File::class, 'file1');
@@ -95,32 +91,14 @@ class FileFormBuilderTest extends SapphireTest
         $this->assertNotNull($form->Actions()->fieldByName('PopoverActions.action_replacefile'));
         $this->assertNotNull($form->Actions()->fieldByName('PopoverActions.action_delete'));
         $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_unpublish'));
-
-        // Add to campaign should not be there by default
-        $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_addtocampaign'));
-
-        // Add extension for campaign-admin
-        Config::modify()->merge(
-            FileFormFactory::class,
-            'extensions',
-            [CampaignAdminExtension::class]
-        );
-
-        $builder = new FileFormFactory();
-        $form = $builder->getForm($controller, 'EditForm', ['Record' => $file, 'RequireLinkText' => false]);
-
-        // Add to campaign should now be available
-        $this->assertNotNull($form->Actions()->fieldByName('PopoverActions.action_addtocampaign'));
     }
 
     public function testEditFileFormWithPermissions()
     {
-        // Add extension for campaign-admin
-        FileFormFactory::add_extension(CampaignAdminExtension::class);
         // Add extension to simulate different permissions
         File::add_extension(FileExtension::class);
 
-        $this->logInWithPermission('CMS_ACCESS_CampaignAdmin');
+        $this->logInWithPermission('CMS_ACCESS_AssetAdmin');
 
         /** @var File $file */
         $file = $this->objFromFixture(File::class, 'file1');
@@ -135,7 +113,6 @@ class FileFormBuilderTest extends SapphireTest
         $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_delete'));
         $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_replacefile'));
 
-        $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_addtocampaign'));
         $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_unpublish'));
 
         FileExtension::$canDelete = false;
@@ -144,7 +121,6 @@ class FileFormBuilderTest extends SapphireTest
         $form = $builder->getForm($controller, 'EditForm', ['Record' => $file, 'RequireLinkText' => false]);
         $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_delete'));
         $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_replacefile'));
-        $this->assertNotNull($form->Actions()->fieldByName('PopoverActions.action_addtocampaign'));
         $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_unpublish'));
 
         FileExtension::$canDelete = true;
@@ -153,7 +129,6 @@ class FileFormBuilderTest extends SapphireTest
         $form = $builder->getForm($controller, 'EditForm', ['Record' => $file]);
         $this->assertNotNull($form->Actions()->fieldByName('PopoverActions.action_delete'));
         $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_replacefile'));
-        $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_addtocampaign'));
         $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_unpublish'));
 
         FileExtension::$canDelete = false;
@@ -162,7 +137,6 @@ class FileFormBuilderTest extends SapphireTest
         $form = $builder->getForm($controller, 'EditForm', ['Record' => $file]);
         $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_delete'));
         $this->assertNotNull($form->Actions()->fieldByName('PopoverActions.action_replacefile'));
-        $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_addtocampaign'));
         $this->assertNull($form->Actions()->fieldByName('PopoverActions.action_unpublish'));
 
         FileExtension::$canDelete = true;
@@ -173,10 +147,8 @@ class FileFormBuilderTest extends SapphireTest
         $form = $builder->getForm($controller, 'EditForm', ['Record' => $file, 'RequireLinkText' => false]);
         $this->assertNotNull($form->Actions()->fieldByName('PopoverActions.action_delete'));
         $this->assertNotNull($form->Actions()->fieldByName('PopoverActions.action_replacefile'));
-        $this->assertNotNull($form->Actions()->fieldByName('PopoverActions.action_addtocampaign'));
         $this->assertNotNull($form->Actions()->fieldByName('PopoverActions.action_unpublish'));
 
-        FileFormFactory::remove_extension(CampaignAdminExtension::class);
         File::remove_extension(FileExtension::class);
     }
 

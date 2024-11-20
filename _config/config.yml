@@ -48,14 +48,6 @@ SilverStripe\Core\Injector\Injector:
   SilverStripe\Forms\FileHandleField:
     class: SilverStripe\AssetAdmin\Forms\UploadField
 ---
-Name: assetadmincampaigns
-Only:
-  moduleexists: 'silverstripe/campaign-admin'
----
-SilverStripe\AssetAdmin\Forms\FileFormFactory:
-  extensions:
-    - 'SilverStripe\AssetAdmin\Extensions\CampaignAdminExtension'
----
 Name: assetadminmodals
 ---
 SilverStripe\Admin\ModalController:

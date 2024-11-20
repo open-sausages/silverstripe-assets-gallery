@@ -24,7 +24,6 @@ use SilverStripe\Assets\Folder;
 use SilverStripe\Assets\Image;
 use SilverStripe\Assets\Storage\AssetNameGenerator;
 use SilverStripe\Assets\Upload;
-use SilverStripe\CampaignAdmin\AddToCampaignHandler;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
@@ -97,7 +96,6 @@ class AssetAdmin extends AssetAdminOpen implements PermissionProvider
         'folderCreateForm',
         'fileEditForm',
         'fileHistoryForm',
-        'addToCampaignForm',
         'fileInsertForm',
         'fileEditorLinkForm',
         'schema',
@@ -291,9 +289,6 @@ class AssetAdmin extends AssetAdminOpen implements PermissionProvider
                 ],
                 'fileSelectForm' => [
                     'schemaUrl' => $this->Link('schema/fileSelectForm')
-                ],
-                'addToCampaignForm' => [
-                    'schemaUrl' => $this->Link('schema/addToCampaignForm')
                 ],
                 'fileHistoryForm' => [
                     'schemaUrl' => $this->Link('schema/fileHistoryForm')
@@ -1423,84 +1418,6 @@ class AssetAdmin extends AssetAdminOpen implements PermissionProvider
 
         $this->extend('updateGeneratedThumbnails', $file, $links, $generator);
         return $links;
-    }
-
-    /**
-     * Action handler for adding pages to a campaign
-     *
-     * @deprecated 2.4.0 Will be removed without equivalent functionality to replace it
-     */
-    public function addtocampaign(array $data, Form $form): HTTPResponse
-    {
-        Deprecation::noticeWithNoReplacment('2.4.0');
-        $id = $data['ID'];
-        $record = File::get()->byID($id);
-
-        $handler = AddToCampaignHandler::create($this, $record, 'addToCampaignForm');
-        $response = $handler->addToCampaign($record, $data);
-        $message = $response->getBody();
-        if (empty($message)) {
-            return $response;
-        }
-
-        // Send extra "message" data with schema response
-        $extraData = ['message' => $message];
-        $schemaId = Controller::join_links($this->Link('schema/addToCampaignForm'), $id);
-        return $this->getSchemaResponse($schemaId, $form, null, $extraData);
-    }
-
-    /**
-     * Url handler for add to campaign form
-     *
-     * @param HTTPRequest $request
-     * @return Form
-     * @deprecated 2.4.0 Will be removed without equivalent functionality to replace it
-     */
-    public function addToCampaignForm($request)
-    {
-        Deprecation::noticeWithNoReplacment('2.4.0');
-        // Get ID either from posted back value, or url parameter
-        $id = $request->param('ID') ?: $request->postVar('ID');
-        return $this->getAddToCampaignForm($id);
-    }
-
-    /**
-     * @param int $id
-     * @return Form|HTTPResponse
-     * @deprecated 2.4.0 Will be removed without equivalent functionality to replace it
-     */
-    public function getAddToCampaignForm($id)
-    {
-        Deprecation::noticeWithNoReplacment('2.4.0');
-        // Get record-specific fields
-        $record = File::get()->byID($id);
-
-        if (!$record) {
-            $this->jsonError(404, _t(
-                __CLASS__.'.ErrorNotFound',
-                "That {Type} couldn't be found",
-                ['Type' => File::singleton()->i18n_singular_name()]
-            ));
-            return null;
-        }
-        if (!$record->canView()) {
-            $this->jsonError(403, _t(
-                __CLASS__.'.ErrorItemPermissionDenied',
-                "You don't have the necessary permissions to modify {ObjectTitle}",
-                ['ObjectTitle' => $record->i18n_singular_name()]
-            ));
-            return null;
-        }
-
-        $handler = AddToCampaignHandler::create($this, $record, 'addToCampaignForm');
-        $form = $handler->Form($record);
-
-        $form->setValidationResponseCallback(function (ValidationResult $errors) use ($form, $id) {
-            $schemaId = Controller::join_links($this->Link('schema/addToCampaignForm'), $id);
-            return $this->getSchemaResponse($schemaId, $form, $errors);
-        });
-
-        return $form;
     }
 
     /**
