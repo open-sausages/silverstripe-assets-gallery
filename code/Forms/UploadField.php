@@ -288,8 +288,6 @@ class UploadField extends FormField implements FileHandleField
             'type' => 'file',
             'multiple' => $this->getIsMultiUpload(),
             'id' => $this->ID(),
-            'data-schema' => json_encode($this->getSchemaData()),
-            'data-state' => json_encode($this->getSchemaState()),
         );
 
         $attributes = array_merge($attributes, $this->attributes);
