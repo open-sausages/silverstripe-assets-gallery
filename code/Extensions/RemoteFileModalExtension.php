@@ -4,20 +4,15 @@ namespace SilverStripe\AssetAdmin\Extensions;
 
 use Embed\Http\NetworkException;
 use Embed\Http\RequestException;
-use SilverStripe\Admin\FormSchemaController;
-use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Admin\ModalController;
 use SilverStripe\AssetAdmin\Forms\RemoteFileFormFactory;
 use SilverStripe\AssetAdmin\Exceptions\InvalidRemoteUrlException;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
-use SilverStripe\Core\Convert;
 use SilverStripe\Core\Extension;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
-use SilverStripe\Forms\Schema\FormSchema;
 use SilverStripe\Core\Validation\ValidationResult;
 
 /**
@@ -32,26 +27,6 @@ class RemoteFileModalExtension extends Extension
         'remoteEditForm',
         'remoteEditFormSchema',
     );
-
-    /**
-     * @return HTTPRequest
-     * @deprecated 2.4.0 Use $this->getOwner()->getRequest() instead.
-     */
-    protected function getRequest()
-    {
-        Deprecation::notice('2.4.0', 'Use $this->getOwner()->getRequest() instead.');
-        return $this->getOwner()->getRequest();
-    }
-
-    /**
-     * @return FormSchema
-     * @deprecated 2.4.0 Will be removed without equivalent functionality to replace it.
-     */
-    protected function getFormSchema()
-    {
-        Deprecation::noticeWithNoReplacment('2.4.0');
-        return FormSchema::singleton();
-    }
 
     /**
      * Form for creating a new OEmbed object in the WYSIWYG, used by the InsertEmbedModal component
@@ -97,7 +72,7 @@ class RemoteFileModalExtension extends Extension
         $schemaID = $request->getURL();
         try {
             $form = $this->remoteEditForm();
-            return $this->getSchemaResponse($schemaID, $form);
+            return $this->getOwner()->getSchemaResponse($schemaID, $form);
         } catch (NetworkException | RequestException | InvalidRemoteUrlException $exception) {
             $errors = ValidationResult::create()
                 ->addError($exception->getMessage());
@@ -109,35 +84,9 @@ class RemoteFileModalExtension extends Extension
             }
 
             return $this
+                ->getOwner()
                 ->getSchemaResponse($schemaID, $form, $errors)
                 ->setStatusCode($code);
         }
-    }
-
-    /**
-     * Generate schema for the given form based on the X-Formschema-Request header value
-     *
-     * @param string $schemaID ID for this schema. Required.
-     * @param Form $form Required for 'state' or 'schema' response
-     * @param ValidationResult $errors Required for 'error' response
-     * @param array $extraData Any extra data to be merged with the schema response
-     * @return HTTPResponse
-     * @deprecated 2.4.0 Will be replaced with $this->getOwner()->getSchemaResponse() instead.
-     */
-    protected function getSchemaResponse($schemaID, $form = null, ValidationResult $errors = null, $extraData = [])
-    {
-        Deprecation::noticeWithNoReplacment('2.4.0', 'Will be replaced with $this->getOwner()->getSchemaResponse() instead.');
-        $parts = $this->getOwner()->getRequest()->getHeader(FormSchemaController::SCHEMA_HEADER);
-        $data = $this
-            ->getFormSchema()
-            ->getMultipartSchema($parts, $schemaID, $form, $errors);
-
-        if ($extraData) {
-            $data = array_merge($data, $extraData);
-        }
-
-        $response = new HTTPResponse(json_encode($data));
-        $response->addHeader('Content-Type', 'application/json');
-        return $response;
     }
 }
