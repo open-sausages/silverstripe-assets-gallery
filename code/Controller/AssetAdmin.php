@@ -1194,9 +1194,12 @@ class AssetAdmin extends LeftAndMain implements PermissionProvider
 
     /**
      * Action handler for adding pages to a campaign
+     *
+     * @deprecated 2.4.0 Will be removed without equivalent functionality to replace it
      */
     public function addtocampaign(array $data, Form $form): HTTPResponse
     {
+        Deprecation::noticeWithNoReplacment('2.4.0');
         $id = $data['ID'];
         $record = File::get()->byID($id);
 
@@ -1218,9 +1221,11 @@ class AssetAdmin extends LeftAndMain implements PermissionProvider
      *
      * @param HTTPRequest $request
      * @return Form
+     * @deprecated 2.4.0 Will be removed without equivalent functionality to replace it
      */
     public function addToCampaignForm($request)
     {
+        Deprecation::noticeWithNoReplacment('2.4.0');
         // Get ID either from posted back value, or url parameter
         $id = $request->param('ID') ?: $request->postVar('ID');
         return $this->getAddToCampaignForm($id);
@@ -1229,9 +1234,11 @@ class AssetAdmin extends LeftAndMain implements PermissionProvider
     /**
      * @param int $id
      * @return Form|HTTPResponse
+     * @deprecated 2.4.0 Will be removed without equivalent functionality to replace it
      */
     public function getAddToCampaignForm($id)
     {
+        Deprecation::noticeWithNoReplacment('2.4.0');
         // Get record-specific fields
         $record = File::get()->byID($id);
 
