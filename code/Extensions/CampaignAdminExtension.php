@@ -7,15 +7,23 @@ use SilverStripe\Assets\File;
 use SilverStripe\Core\Extension;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Security\Permission;
+use SilverStripe\Dev\Deprecation;
 
 /**
  * Extension that updates the Popover menu of `FileFormFactory`.
  * This extension will only be applied if the `campaign-admin` module is installed.
  *
  * @extends Extension<FileFormFactory>
+ * @deprecated 2.4.0 Will be removed without equivalent functionality to replace it
  */
 class CampaignAdminExtension extends Extension
 {
+    public function __construct()
+    {
+        Deprecation::noticeWithNoReplacment('2.4.0', scope: Deprecation::SCOPE_CLASS);
+        parent::__construct();
+    }
+
     /**
      * Update the Popover menu of `FileFormFactory` with the "Add to campaign" button.
      *
