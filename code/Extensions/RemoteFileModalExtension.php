@@ -14,6 +14,7 @@ use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Extension;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\Schema\FormSchema;
@@ -34,17 +35,21 @@ class RemoteFileModalExtension extends Extension
 
     /**
      * @return HTTPRequest
+     * @deprecated 2.4.0 Use $this->getOwner()->getRequest() instead.
      */
     protected function getRequest()
     {
+        Deprecation::notice('2.4.0', 'Use $this->getOwner()->getRequest() instead.');
         return $this->getOwner()->getRequest();
     }
 
     /**
      * @return FormSchema
+     * @deprecated 2.4.0 Will be removed without equivalent functionality to replace it.
      */
     protected function getFormSchema()
     {
+        Deprecation::noticeWithNoReplacment('2.4.0');
         return FormSchema::singleton();
     }
 
@@ -70,7 +75,7 @@ class RemoteFileModalExtension extends Extension
      */
     public function remoteEditForm()
     {
-        $url = $this->getRequest()->requestVar('embedurl');
+        $url = $this->getOwner()->getRequest()->requestVar('embedurl');
         $form = null;
         $form = Injector::inst()->get(RemoteFileFormFactory::class)
             ->getForm(
@@ -117,10 +122,12 @@ class RemoteFileModalExtension extends Extension
      * @param ValidationResult $errors Required for 'error' response
      * @param array $extraData Any extra data to be merged with the schema response
      * @return HTTPResponse
+     * @deprecated 2.4.0 Will be replaced with $this->getOwner()->getSchemaResponse() instead.
      */
     protected function getSchemaResponse($schemaID, $form = null, ValidationResult $errors = null, $extraData = [])
     {
-        $parts = $this->getRequest()->getHeader(FormSchemaController::SCHEMA_HEADER);
+        Deprecation::noticeWithNoReplacment('2.4.0', 'Will be replaced with $this->getOwner()->getSchemaResponse() instead.');
+        $parts = $this->getOwner()->getRequest()->getHeader(FormSchemaController::SCHEMA_HEADER);
         $data = $this
             ->getFormSchema()
             ->getMultipartSchema($parts, $schemaID, $form, $errors);
