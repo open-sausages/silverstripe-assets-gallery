@@ -13,7 +13,7 @@ use SilverStripe\Control\RequestHandler;
 class FolderFormFactory extends AssetFormFactory
 {
 
-    protected function getFormFields(RequestHandler $controller = null, $name, $context = [])
+    protected function getFormFields(?RequestHandler $controller = null, $name, $context = [])
     {
         /** @var Folder $record */
         $record = $context['Record'] ?? null;

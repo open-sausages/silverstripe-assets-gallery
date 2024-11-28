@@ -12,7 +12,7 @@ use SilverStripe\Forms\ReadonlyField;
 
 class FileHistoryFormFactory extends FileFormFactory
 {
-    public function getForm(RequestHandler $controller = null, $name = FormFactory::DEFAULT_NAME, $context = [])
+    public function getForm(?RequestHandler $controller = null, $name = FormFactory::DEFAULT_NAME, $context = [])
     {
         $context['RequireLinkText'] = false;
         $form = parent::getForm($controller, $name, $context);
@@ -47,7 +47,7 @@ class FileHistoryFormFactory extends FileFormFactory
         );
     }
 
-    protected function getFormFields(RequestHandler $controller = null, $name, $context = [])
+    protected function getFormFields(?RequestHandler $controller = null, $name, $context = [])
     {
         $record = $context['Record'];
 
@@ -68,7 +68,7 @@ class FileHistoryFormFactory extends FileFormFactory
     }
 
 
-    protected function getFormActions(RequestHandler $controller = null, $formName, $context = [])
+    protected function getFormActions(?RequestHandler $controller = null, $formName, $context = [])
     {
         $actions = new FieldList();
         // Update

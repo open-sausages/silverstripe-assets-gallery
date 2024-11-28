@@ -147,7 +147,7 @@ class ThumbnailGenerator
      * @param AssetContainer $thumbnail
      * @return string
      */
-    public function generateLink(AssetContainer $thumbnail = null)
+    public function generateLink(?AssetContainer $thumbnail = null)
     {
         // Check if thumbnail can be found
         if (!$thumbnail || !$thumbnail->exists() || !$thumbnail->getIsImage()) {

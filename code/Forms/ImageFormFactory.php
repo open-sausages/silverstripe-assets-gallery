@@ -137,7 +137,7 @@ class ImageFormFactory extends FileFormFactory
      * @param array $context
      * @return Form
      */
-    public function getForm(RequestHandler $controller = null, $name = FormFactory::DEFAULT_NAME, $context = [])
+    public function getForm(?RequestHandler $controller = null, $name = FormFactory::DEFAULT_NAME, $context = [])
     {
         $this->beforeExtending('updateForm', function (Form $form) use ($context) {
             $record = null;

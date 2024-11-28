@@ -198,7 +198,7 @@ class FileFormFactory extends AssetFormFactory
      * @param array $context
      * @return FieldList
      */
-    protected function getFormFields(RequestHandler $controller = null, $formName, $context = [])
+    protected function getFormFields(?RequestHandler $controller = null, $formName, $context = [])
     {
         /** @var File $record */
         $record = $context['Record'];
@@ -266,7 +266,7 @@ class FileFormFactory extends AssetFormFactory
      * @param array $context
      * @return FieldList
      */
-    protected function getFormActions(RequestHandler $controller = null, $formName, $context = [])
+    protected function getFormActions(?RequestHandler $controller = null, $formName, $context = [])
     {
         $record = $context['Record'];
         $fileSelected = $context['FileSelected'] ?? false;
@@ -505,7 +505,7 @@ class FileFormFactory extends AssetFormFactory
      * @param $context
      * @return RequiredFields
      */
-    protected function getValidator(RequestHandler $controller = null, $formName, $context = [])
+    protected function getValidator(?RequestHandler $controller = null, $formName, $context = [])
     {
         $validator = parent::getValidator($controller, $formName, $context);
 
