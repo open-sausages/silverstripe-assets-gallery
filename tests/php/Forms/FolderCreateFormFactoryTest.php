@@ -13,9 +13,6 @@ class FolderCreateFormFactoryTest extends SapphireTest
 {
     public function testEditFileForm()
     {
-        // Ensure campaign-admin extension is not applied!
-        Config::modify()->remove(FileFormFactory::class, 'extensions');
-
         $this->logInWithPermission('ADMIN');
 
         $controller = new AssetAdmin();
