@@ -47,7 +47,7 @@ class FileHistoryFormFactory extends FileFormFactory
         );
     }
 
-    protected function getFormFields(?RequestHandler $controller = null, $name, $context = [])
+    protected function getFormFields(?RequestHandler $controller, $name, $context = [])
     {
         $record = $context['Record'];
 
@@ -68,7 +68,7 @@ class FileHistoryFormFactory extends FileFormFactory
     }
 
 
-    protected function getFormActions(?RequestHandler $controller = null, $formName, $context = [])
+    protected function getFormActions(?RequestHandler $controller, $formName, $context = [])
     {
         $actions = new FieldList();
         // Update

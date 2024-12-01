@@ -110,7 +110,7 @@ abstract class AssetFormFactory implements FormFactory
      * @param $context
      * @return RequiredFields
      */
-    protected function getValidator(?RequestHandler $controller = null, $formName, $context = [])
+    protected function getValidator(?RequestHandler $controller, $formName, $context = [])
     {
         $validator = new RequiredFields('Name');
 
@@ -199,7 +199,7 @@ abstract class AssetFormFactory implements FormFactory
      * @param array $context
      * @return FieldList
      */
-    protected function getFormActions(?RequestHandler $controller = null, $formName, $context = [])
+    protected function getFormActions(?RequestHandler $controller, $formName, $context = [])
     {
         $record = isset($context['Record']) ? $context['Record'] : null;
 
@@ -224,7 +224,7 @@ abstract class AssetFormFactory implements FormFactory
      * @param array $context
      * @return FieldList
      */
-    protected function getFormFields(?RequestHandler $controller = null, $formName, $context = [])
+    protected function getFormFields(?RequestHandler $controller, $formName, $context = [])
     {
         /** @var File $record */
         $record = isset($context['Record']) ? $context['Record'] : null;
