@@ -7,6 +7,7 @@ use SilverStripe\Assets\File;
 use SilverStripe\Assets\Folder;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
+use SilverStripe\Core\Validation\ValidationResult;
 use SilverStripe\Forms\FileHandleField;
 use SilverStripe\Forms\FileUploadReceiver;
 use SilverStripe\Forms\FormField;
@@ -318,28 +319,24 @@ class UploadField extends FormField implements FileHandleField
 
     /**
      * Checks if the number of files attached adheres to the $allowedMaxFileNumber defined
-     *
-     * @param Validator $validator
-     * @return bool
      */
-    public function validate($validator)
+    public function validate(): ValidationResult
     {
-        $maxFiles = $this->getAllowedMaxFileNumber();
-        $count = count($this->getItems() ?? []);
-
-        if ($maxFiles < 1 || $count <= $maxFiles) {
-            return $this->extendValidationResult(true, $validator);
-        }
-
-        $validator->validationError($this->getName(), _t(
-            __CLASS__ . '.ErrorMaxFilesReached',
-            'You can only upload {count} file.|You can only upload {count} files.',
-            [
-                'count' => $maxFiles,
-            ]
-        ));
-
-        return $this->extendValidationResult(false, $validator);
+        $this->beforeExtending('updateValidate', function (ValidationResult $result) {
+            $maxFiles = $this->getAllowedMaxFileNumber();
+            $count = count($this->getItems() ?? []);
+            if ($maxFiles < 1 || $count <= $maxFiles) {
+                return;
+            }
+            $result->addFieldError($this->getName(), _t(
+                __CLASS__ . '.ErrorMaxFilesReached',
+                'You can only upload {count} file.|You can only upload {count} files.',
+                [
+                    'count' => $maxFiles,
+                ]
+            ));
+        });
+        return parent::validate();
     }
 
     /**
