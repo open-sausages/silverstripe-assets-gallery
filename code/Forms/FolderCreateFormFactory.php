@@ -16,7 +16,7 @@ class FolderCreateFormFactory extends FolderFormFactory
         return ['ParentID'];
     }
 
-    public function getFormFields(RequestHandler $controller = null, $name, $context = [])
+    public function getFormFields(?RequestHandler $controller, $name, $context = [])
     {
         // Add status flag before extensions are triggered
         $this->beforeExtending('updateFormFields', function (FieldList $fields) use ($context) {

@@ -31,7 +31,7 @@ class FileSearchFormFactory implements FormFactory
      * Custom factories may support more advanced parameters.
      * @return Form
      */
-    public function getForm(RequestHandler $controller = null, $name = FormFactory::DEFAULT_NAME, $context = [])
+    public function getForm(?RequestHandler $controller = null, $name = FormFactory::DEFAULT_NAME, $context = [])
     {
         $fields = $this->getFormFields($controller, $name, $context);
         $actions = FieldList::create();
@@ -49,7 +49,7 @@ class FileSearchFormFactory implements FormFactory
      * @param array $context
      * @return FieldList
      */
-    protected function getFormFields(RequestHandler $controller = null, $name, $context = [])
+    protected function getFormFields(?RequestHandler $controller, $name, $context = [])
     {
         // Note: "Name" field is excluded as it is baked directly into the Search.js react component
 

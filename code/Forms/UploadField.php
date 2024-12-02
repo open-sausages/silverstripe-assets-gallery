@@ -92,7 +92,7 @@ class UploadField extends FormField implements FileHandleField
      * @param string $title The field label.
      * @param SS_List $items Items assigned to this field
      */
-    public function __construct($name, $title = null, SS_List $items = null)
+    public function __construct($name, $title = null, ?SS_List $items = null)
     {
         $this->constructFileUploadReceiver();
 

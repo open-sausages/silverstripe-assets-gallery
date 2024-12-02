@@ -92,7 +92,7 @@ class RemoteFileFormFactory implements FormFactory
      * @param array $context
      * @return Form
      */
-    public function getForm(RequestHandler $controller = null, $name = RemoteFileFormFactory::DEFAULT_NAME, $context = [])
+    public function getForm(?RequestHandler $controller = null, $name = RemoteFileFormFactory::DEFAULT_NAME, $context = [])
     {
         // Allow form to be disabled
         if (!static::config()->get('enabled')) {
