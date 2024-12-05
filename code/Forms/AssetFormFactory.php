@@ -21,7 +21,7 @@ use SilverStripe\Forms\ListboxField;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\PopoverField;
 use SilverStripe\Forms\ReadonlyField;
-use SilverStripe\Forms\RequiredFields;
+use SilverStripe\Forms\Validation\RequiredFieldsValidator;
 use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\Forms\TextField;
@@ -108,11 +108,11 @@ abstract class AssetFormFactory implements FormFactory
      * @param RequestHandler $controller
      * @param $formName
      * @param $context
-     * @return RequiredFields
+     * @return RequiredFieldsValidator
      */
     protected function getValidator(?RequestHandler $controller, $formName, $context = [])
     {
-        $validator = new RequiredFields('Name');
+        $validator = new RequiredFieldsValidator('Name');
 
         return $validator;
     }
