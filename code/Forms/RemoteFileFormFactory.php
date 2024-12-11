@@ -109,8 +109,7 @@ class RemoteFileFormFactory implements FormFactory
         $fields = $this->getFormFields($controller, $name, $context);
         $actions = $this->getFormActions($controller, $name, $context);
 
-        $validator = new RequiredFieldsValidator();
-        $form = Form::create($controller, $name, $fields, $actions, $validator);
+        $form = Form::create($controller, $name, $fields, $actions);
         $form->addExtraClass('form--fill-height');
         $form->addExtraClass('form--no-dividers');
         $form->addExtraClass('insert-embed-modal--'. strtolower($context['type'] ?? ''));
