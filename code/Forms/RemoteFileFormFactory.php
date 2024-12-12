@@ -18,7 +18,7 @@ use SilverStripe\Forms\FormFactory;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\OptionsetField;
-use SilverStripe\Forms\RequiredFields;
+use SilverStripe\Forms\Validation\RequiredFieldsValidator;
 use SilverStripe\Forms\TextField;
 use SilverStripe\View\Embed\Embeddable;
 
@@ -109,8 +109,7 @@ class RemoteFileFormFactory implements FormFactory
         $fields = $this->getFormFields($controller, $name, $context);
         $actions = $this->getFormActions($controller, $name, $context);
 
-        $validator = new RequiredFields();
-        $form = Form::create($controller, $name, $fields, $actions, $validator);
+        $form = Form::create($controller, $name, $fields, $actions);
         $form->addExtraClass('form--fill-height');
         $form->addExtraClass('form--no-dividers');
         $form->addExtraClass('insert-embed-modal--'. strtolower($context['type'] ?? ''));
