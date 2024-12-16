@@ -63,6 +63,7 @@
     "webpack-cli": "^5.0.0"
   },
   "dependencies": {
+    "@deltablot/dropzone": "^7.2.0",
     "@popperjs/core": "^2.11.6",
     "bootstrap": "^4.6.2",
     "classnames": "^2.3.2",
@@ -70,7 +71,6 @@
     "create-react-class": "^15.7.0",
     "crypto-js": "^4.1.1",
     "deep-freeze-strict": "^1.1.1",
-    "dropzone": "^6.0.0-beta.2",
     "griddle-react": "^0.8.2",
     "merge": "^2.1.1",
     "modernizr": "^3.12.0",
