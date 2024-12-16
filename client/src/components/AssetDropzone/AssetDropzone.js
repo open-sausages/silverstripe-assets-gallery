@@ -1,7 +1,7 @@
 /* global FileReader, Image, document, FormData */
 import React, { Component } from 'react';
 import i18n from 'i18n';
-import DropzoneLib from 'dropzone';
+import DropzoneLib from '@deltablot/dropzone';
 import $ from 'jquery';
 import { getFileExtension } from 'lib/DataFormat';
 import PropTypes from 'prop-types';
