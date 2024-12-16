@@ -281,6 +281,7 @@ Feature: Manage files
       Then I should see "No items found"
       And I should see "File type: Archive"
     Then I press the "Close" button
+      And I wait for 1 second
       And I should not see an "#AssetSearchForm_searchbox" element
       And I should see the file named "folder1" in the gallery
 
