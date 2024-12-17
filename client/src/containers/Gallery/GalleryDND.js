@@ -1,80 +1,83 @@
 /* global window */
-import React, { Component } from 'react';
+import React, { useCallback, useState } from 'react';
 import classnames from 'classnames';
 import GalleryItemDragLayer from 'components/GalleryItem/GalleryItemDragLayer';
 import PropTypes from 'prop-types';
-import context from 'lib/withDragDropContext';
+import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { snapCenterToCursor } from '@dnd-kit/modifiers';
 
 /**
- * Wrapper stateless component, this is primarily to apply the HOC for drag and drop
+ * Provides drag-and-drop capabilities to the gallery
  */
-class GalleryDND extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dragging: false,
-    };
-    this.mounted = false;
-    this.handleDrop = this.handleDrop.bind(this);
-  }
+function GalleryDND({ className, selectedFiles, onDragStartEnd, onDropFiles, children }) {
+  const [dragging, setDragging] = useState(false);
+  const [draggingItemID, setDraggingItemID] = useState(null);
+  const [draggingItemProps, setDraggingItemProps] = useState(null);
+  const [lastDropSuccess, setLastDropSuccess] = useState(false);
 
-  componentDidMount() {
-    this.mounted = true;
-    window.addEventListener('drop', this.handleDrop, true);
-  }
-
-  componentDidUpdate() {
-    setTimeout(() => {
-      if (!this.mounted || !this.context.dragDropManager) {
-        return;
+  const sensors = useSensors(
+    // Pointer sensor is for touch and mouse.
+    // The activation constraint allows clicking and small twitches without starting a "drag".
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 10
       }
-      const manager = this.context.dragDropManager;
-      // isDragging only updates after one render cycle, which makes this throttle necessary
-      const dragging = manager.monitor.isDragging();
-      if (this.state.dragging !== dragging) {
-        this.setState({ dragging });
-      }
-    });
+    }),
+  );
+
+  const draggingItems = [...selectedFiles];
+  if (!draggingItems.includes(draggingItemID)) {
+    draggingItems.push(draggingItemID);
   }
 
-  componentWillUnmount() {
-    this.mounted = false;
-    window.removeEventListener('drop', this.handleDrop, true);
-  }
-
-  handleDrop() {
-    const manager = this.context.dragDropManager;
-    const backend = manager && manager.backend;
-
-    if (backend && backend.isDraggingNativeItem()) {
-      backend.endDragNativeItem();
+  const handleDragStart = useCallback((event) => {
+    if (typeof onDragStartEnd === 'function') {
+      onDragStartEnd(true);
     }
-  }
+    setDragging(true);
+    setDraggingItemID(event.active.id);
+    setDraggingItemProps(event.active.data.current.props);
+    setLastDropSuccess(false);
+  });
 
-  render() {
-    const {
-      className,
-      children,
-    } = this.props;
+  const handleDragEnd = useCallback((event) => {
+    if (typeof onDragStartEnd === 'function') {
+      onDragStartEnd(false);
+    }
+    if (event.over && typeof onDropFiles === 'function') {
+      setLastDropSuccess(true);
+      onDropFiles(event.over.id, draggingItems);
+    }
+    setDragging(false);
+    setDraggingItemID(null);
+    setDraggingItemProps(null);
+  });
 
-    return (
-      <div className={classnames(className, { 'gallery__main--dragging': this.state.dragging })}>
+  // Disable the drop animation if the file we're dragging got moved out of this folder.
+  const dropAnimationDuration = lastDropSuccess ? 0 : 250;
+
+  return (
+    <div className={classnames(className, { 'gallery__main--dragging': dragging })}>
+      <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd} modifiers={[snapCenterToCursor]}>
         {children}
-        <GalleryItemDragLayer />
-      </div>
-    );
-  }
+        <DragOverlay dropAnimation={{ duration: dropAnimationDuration }}>{dragging && <GalleryItemDragLayer draggingItemProps={draggingItemProps} draggingItems={draggingItems} />}</DragOverlay>
+      </DndContext>
+    </div>
+  );
 }
 GalleryDND.contextTypes = {
   dragDropManager: PropTypes.object,
 };
 
 GalleryDND.propTypes = {
+  selectedFiles: PropTypes.arrayOf(PropTypes.number).isRequired,
   className: PropTypes.string,
+  onDropFiles: PropTypes.func,
+  onDragStartEnd: PropTypes.func,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
 };
 
-export default context(GalleryDND);
+export default GalleryDND;

@@ -499,4 +499,33 @@ EOS
         $this->activatedConfigFiles[] = $path;
         $this->getMainContext()->visit('dev/build?flush');
     }
+
+    /**
+     * Example: When I drag the file named "file1" to the folder "my folder"
+     *
+     * @When /^I drag the (?:file|folder) named "([^"]+)" to the folder "([^"]+)"$/
+     */
+    public function stepDragTheFileToTheFolder(string $fileName, string $folderName): void
+    {
+        $file = $this->getGalleryItem($fileName)->find('xpath', "/ancestor-or-self::div[contains(@class, 'gallery-item__draggable')]");
+        Assert::assertNotNull($file, "File named {$fileName} could not be found or isn't draggable");
+        $folder = $this->getGalleryItem($folderName)->find('xpath', "/ancestor-or-self::div[contains(@class, 'gallery-item__droppable')]");
+        Assert::assertNotNull($folder, "Folder named {$folderName} could not be found or isn't droppable");
+        $file->dragTo($folder);
+    }
+
+    /**
+     * Example: When I drag the folder "my folder" to the back button"
+     *
+     * @When /^I drag the (?:file|folder) named "([^"]+)" to the back button$/
+     */
+    public function stepDragTheFileToTheBackButton(string $fileName): void
+    {
+        $file = $this->getGalleryItem($fileName)->find('xpath', "/ancestor-or-self::div[contains(@class, 'gallery-item__draggable')]");
+        Assert::assertNotNull($file, "File named {$fileName} could not be found or isn't draggable");
+        $page = $this->getMainContext()->getSession()->getPage();
+        $backButton = $page->find('css', '.gallery__back-container .gallery-item__droppable');
+        Assert::assertNotNull($backButton, 'Back button could not be found');
+        $file->dragTo($backButton);
+    }
 }
