@@ -3,6 +3,14 @@
     "description": "Asset management for the SilverStripe CMS",
     "type": "silverstripe-vendormodule",
     "license": "BSD-3-Clause",
+    "keywords": [
+        "Image",
+        "Images",
+        "Assets",
+        "Files",
+        "CMS",
+        "Admin"
+    ],    
     "require": {
         "php": "^8.1",
         "silverstripe/framework": "^5.2",
