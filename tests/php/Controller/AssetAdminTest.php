@@ -793,58 +793,75 @@ class AssetAdminTest extends FunctionalTest
     public static function provideApiMove(): array
     {
         return [
-            'Valid' => [
+            'Valid non-root' => [
                 'idsType' => 'existing',
+                'folderToType' => 'non-root',
+                'fail' => '',
+                'expectedCode' => 204,
+            ],
+            'Valid root' => [
+                'idsType' => 'existing',
+                'folderToType' => 'root',
                 'fail' => '',
                 'expectedCode' => 204,
             ],
             'Reject fail canEdit()' => [
                 'idsType' => 'existing',
+                'folderToType' => 'non-root',
                 'fail' => 'can-edit',
                 'expectedCode' => 403,
             ],
             'Reject fail csrf-token' => [
                 'idsType' => 'existing',
+                'folderToType' => 'non-root',
                 'fail' => 'csrf-token',
                 'expectedCode' => 400,
             ],
             'Reject ids not passed' => [
                 'idsType' => 'existing',
+                'folderToType' => 'non-root',
                 'fail' => 'ids-not-passed',
                 'expectedCode' => 400,
             ],
             'Reject ids is not array' => [
                 'idsType' => 'existing',
+                'folderToType' => 'non-root',
                 'fail' => 'ids-not-array',
                 'expectedCode' => 400,
             ],
             'Reject ids is empty' => [
                 'idsType' => 'existing',
+                'folderToType' => 'non-root',
                 'fail' => 'ids-is-empty',
                 'expectedCode' => 400,
             ],
             'Reject invalid ID' => [
                 'idsType' => 'second-is-invalid',
+                'folderToType' => 'non-root',
                 'fail' => '',
                 'expectedCode' => 400,
             ],
             'Reject non-numeric ID' => [
                 'idsType' => 'second-is-non-numeric',
+                'folderToType' => 'non-root',
                 'fail' => '',
                 'expectedCode' => 400,
             ],
             'Reject new record ID' => [
                 'idsType' => 'second-is-new-record',
+                'folderToType' => 'non-root',
                 'fail' => '',
                 'expectedCode' => 400,
             ],
             'Reject folderID not passed' => [
                 'idsType' => 'existing',
+                'folderToType' => 'non-root',
                 'fail' => 'folder-id-not-passed',
                 'expectedCode' => 400,
             ],
             'Reject folder does not exist' => [
                 'idsType' => 'existing',
+                'folderToType' => 'non-root',
                 'fail' => 'folder-not-exist',
                 'expectedCode' => 400,
             ],
@@ -854,6 +871,7 @@ class AssetAdminTest extends FunctionalTest
     #[DataProvider('provideApiMove')]
     public function testApiMove(
         string $idsType,
+        string $folderToType,
         string $fail,
         int $expectedCode
     ): void {
@@ -862,6 +880,9 @@ class AssetAdminTest extends FunctionalTest
             $this->idFromFixture(Folder::class, 'ApiFolder01'),
             $this->idFromFixture(Folder::class, 'ApiFolder02'),
         ];
+        if ($folderToType === 'root') {
+            $folderIDs[1] = 0;
+        }
         $existingIDs = $this->getIDs('existing');
         TestFile::$fail = $fail;
         $url = '/admin/assets/api/move';
