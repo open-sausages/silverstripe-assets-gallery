@@ -109,7 +109,6 @@ class GalleryToolbar extends Component {
       badges,
       children,
       folder,
-      onMoveFiles,
       onOpenFolder,
       onCreateFolder,
       // Button components
@@ -129,7 +128,6 @@ class GalleryToolbar extends Component {
                 folder={folder}
                 badges={badges}
                 onOpenFolder={onOpenFolder}
-                onMoveFiles={onMoveFiles}
               />
               <UploadButton
                 canEdit={canEdit}
@@ -155,7 +153,6 @@ class GalleryToolbar extends Component {
 }
 
 GalleryToolbar.propTypes = {
-  onMoveFiles: PropTypes.func.isRequired,
   onCreateFolder: PropTypes.func.isRequired,
   onViewChange: PropTypes.func.isRequired,
   onOpenFolder: PropTypes.func.isRequired,

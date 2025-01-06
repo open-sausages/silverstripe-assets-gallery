@@ -836,7 +836,6 @@ class Gallery extends Component {
       onCancelUpload: this.handleCancelUpload,
       onDropFiles: this.handleMoveFiles,
       onRemoveErroredUpload: this.handleRemoveErroredUpload,
-      onEnableDropzone: this.handleEnableDropzone,
       sectionConfig,
       canDrag: type === ACTION_TYPES.ADMIN,
       maxFilesSelect,
@@ -862,7 +861,6 @@ class Gallery extends Component {
     } = this.props;
 
     const props = {
-      onMoveFiles: this.handleMoveFiles,
       onSort: this.handleSort,
       onCreateFolder,
       onOpenFolder,
@@ -952,7 +950,12 @@ class Gallery extends Component {
         ref={gallery => { this.gallery = gallery; }}
       >
         {this.renderTransitionBulkActions()}
-        <GalleryDND className={galleryClasses.join(' ')}>
+        <GalleryDND
+          onDragStartEnd={(dragging) => this.handleEnableDropzone(!dragging)}
+          onDropFiles={this.handleMoveFiles}
+          selectedFiles={this.props.selectedFiles}
+          className={galleryClasses.join(' ')}
+        >
           {this.renderToolbar()}
           <SelectableGroup
             enabled={this.props.view === 'tile' && this.props.type === ACTION_TYPES.ADMIN}
@@ -1038,7 +1041,6 @@ const galleryViewPropTypes = Object.assign({}, sharedPropTypes, {
   onSelect: PropTypes.func,
   onCancelUpload: PropTypes.func,
   onRemoveErroredUpload: PropTypes.func,
-  onEnableDropzone: PropTypes.func,
 });
 
 Gallery.defaultProps = Object.assign({}, sharedDefaultProps, {

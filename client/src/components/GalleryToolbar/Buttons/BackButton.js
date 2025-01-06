@@ -26,7 +26,6 @@ class BackButton extends Component {
     const {
       folder,
       badges,
-      onMoveFiles,
       BackComponent
     } = this.props;
     const { parentId: itemId } = folder;
@@ -39,7 +38,6 @@ class BackButton extends Component {
         <BackComponent
           item={{ id: itemId }}
           onClick={this.handleBackClick}
-          onDropFiles={onMoveFiles}
           badge={badge}
         />
       </div>
@@ -61,7 +59,6 @@ BackButton.propTypes = {
     status: PropTypes.string,
   })).isRequired,
   onOpenFolder: PropTypes.func.isRequired,
-  onMoveFiles: PropTypes.func.isRequired,
   BackComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
 };
 

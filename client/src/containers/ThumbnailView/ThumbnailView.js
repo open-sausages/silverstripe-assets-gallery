@@ -14,11 +14,6 @@ class ThumbnailView extends Component {
     this.handleSetPage = this.handleSetPage.bind(this);
     this.handlePrevPage = this.handlePrevPage.bind(this);
     this.handleNextPage = this.handleNextPage.bind(this);
-    this.handleDrag = this.handleDrag.bind(this);
-  }
-
-  handleDrag(dragging) {
-    this.props.onEnableDropzone(!dragging);
   }
 
   /**
@@ -124,7 +119,6 @@ class ThumbnailView extends Component {
       selectableKey: item.id,
       item,
       selectedFiles,
-      onDrag: this.handleDrag,
       badge,
       canDrag: this.props.canDrag,
     };
@@ -150,8 +144,6 @@ class ThumbnailView extends Component {
     }
 
     if (item.type === 'folder') {
-      const { onDropFiles } = this.props;
-      props = { ...props, onDropFiles };
       return <Folder {...props} />;
     }
     return <File {...props} />;
