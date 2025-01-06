@@ -11,20 +11,31 @@ use SilverStripe\GraphQL\QueryHandler\UserContextProvider;
 use SilverStripe\Versioned\RecursivePublishable;
 use SilverStripe\Versioned\Versioned;
 use InvalidArgumentException;
+use SilverStripe\Dev\Deprecation;
 
+/**
+ * @deprecated 5.3.0 Will be moved to the silverstripe/graphql module
+ */
 class PublicationResolver
 {
     const ACTION_PUBLISH = 'publish';
     const ACTION_UNPUBLISH = 'unpublish';
 
+    public function __construct()
+    {
+        Deprecation::withSuppressedNotice(function () {
+            Deprecation::notice('2.3.0', 'Will be moved to the silverstripe/graphql module', Deprecation::SCOPE_CLASS);
+        });
+    }
+
     public static function resolvePublishFiles(...$params)
     {
-        return self::resolvePublicationOperation(self::ACTION_PUBLISH, ...$params);
+        return PublicationResolver::resolvePublicationOperation(PublicationResolver::ACTION_PUBLISH, ...$params);
     }
 
     public static function resolveUnpublishFiles(...$params)
     {
-        return self::resolvePublicationOperation(self::ACTION_UNPUBLISH, ...$params);
+        return PublicationResolver::resolvePublicationOperation(PublicationResolver::ACTION_UNPUBLISH, ...$params);
     }
 
     /**
@@ -45,7 +56,7 @@ class PublicationResolver
         if (!isset($args['ids']) || !is_array($args['ids'])) {
             throw new InvalidArgumentException('IDs must be an array');
         }
-        $isPublish = $action === self::ACTION_PUBLISH;
+        $isPublish = $action === PublicationResolver::ACTION_PUBLISH;
         $sourceStage = $isPublish ? Versioned::DRAFT : Versioned::LIVE;
         $force = $args['force'] ?? false;
         $quiet = $args['quiet'] ?? false;
@@ -87,8 +98,8 @@ class PublicationResolver
 
         foreach ($allowedFiles as $file) {
             $result[] = $isPublish
-                ? self::publishFile($file, $force)
-                : self::unpublishFile($file, $force);
+                ? PublicationResolver::publishFile($file, $force)
+                : PublicationResolver::unpublishFile($file, $force);
         }
 
         return $result;
@@ -116,7 +127,7 @@ class PublicationResolver
     {
         // If not forcing, make sure we aren't interfering with any owners
         if (!$force) {
-            $ownersCount = self::countLiveOwners($file);
+            $ownersCount = PublicationResolver::countLiveOwners($file);
             if ($ownersCount) {
                 return new Notice(
                     _t(

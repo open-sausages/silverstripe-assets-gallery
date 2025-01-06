@@ -28,6 +28,7 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormFactory;
 use SilverStripe\ORM\ArrayList;
@@ -58,6 +59,9 @@ class AssetAdmin extends LeftAndMain implements PermissionProvider
 
     private static $menu_icon_class = 'font-icon-image';
 
+    /**
+     * @deprecated 5.4.0 Will be renamed to model_class
+     */
     private static $tree_class = Folder::class;
 
     private static $url_handlers = [
@@ -1081,7 +1085,9 @@ class AssetAdmin extends LeftAndMain implements PermissionProvider
         $object['filename'] = $file->Filename;
         $object['url'] = $file->AbsoluteURL;
         $object['canEdit'] = $file->canEdit();
-        $object['canDelete'] = ($file->hasMethod('canArchive')) ? $file->canArchive() : $file->canDelete();
+        $object['canDelete'] = ($file->hasMethod('canArchive'))
+            ? Deprecation::withSuppressedNotice(fn() => $file->canArchive())
+            : $file->canDelete();
 
         $owner = $file->Owner();
 
@@ -1188,9 +1194,12 @@ class AssetAdmin extends LeftAndMain implements PermissionProvider
 
     /**
      * Action handler for adding pages to a campaign
+     *
+     * @deprecated 2.4.0 Will be removed without equivalent functionality to replace it
      */
     public function addtocampaign(array $data, Form $form): HTTPResponse
     {
+        Deprecation::noticeWithNoReplacment('2.4.0');
         $id = $data['ID'];
         $record = File::get()->byID($id);
 
@@ -1212,9 +1221,11 @@ class AssetAdmin extends LeftAndMain implements PermissionProvider
      *
      * @param HTTPRequest $request
      * @return Form
+     * @deprecated 2.4.0 Will be removed without equivalent functionality to replace it
      */
     public function addToCampaignForm($request)
     {
+        Deprecation::noticeWithNoReplacment('2.4.0');
         // Get ID either from posted back value, or url parameter
         $id = $request->param('ID') ?: $request->postVar('ID');
         return $this->getAddToCampaignForm($id);
@@ -1223,9 +1234,11 @@ class AssetAdmin extends LeftAndMain implements PermissionProvider
     /**
      * @param int $id
      * @return Form|HTTPResponse
+     * @deprecated 2.4.0 Will be removed without equivalent functionality to replace it
      */
     public function getAddToCampaignForm($id)
     {
+        Deprecation::noticeWithNoReplacment('2.4.0');
         // Get record-specific fields
         $record = File::get()->byID($id);
 

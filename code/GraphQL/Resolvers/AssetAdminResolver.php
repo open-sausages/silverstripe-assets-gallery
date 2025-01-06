@@ -16,9 +16,20 @@ use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\Filterable;
 use SilverStripe\Versioned\Versioned;
 use InvalidArgumentException;
+use SilverStripe\Dev\Deprecation;
 
+/**
+ * @deprecated 5.3.0 Will be moved to the silverstripe/graphql module
+ */
 class AssetAdminResolver
 {
+    public function __construct()
+    {
+        Deprecation::withSuppressedNotice(function () {
+            Deprecation::notice('2.3.0', 'Will be moved to the silverstripe/graphql module', Deprecation::SCOPE_CLASS);
+        });
+    }
+
     public static function resolveFileInterfaceType($object)
     {
         if ($object instanceof Folder) {
@@ -126,7 +137,8 @@ class AssetAdminResolver
         $deletedIDs = [];
         $member = UserContextProvider::get($context);
         foreach ($files as $file) {
-            if ($file->canArchive($member)) {
+            $canArchive = Deprecation::withSuppressedNotice(fn() => $file->canArchive($member));
+            if ($canArchive) {
                 $file->doArchive();
                 $deletedIDs[] = $file->ID;
             }

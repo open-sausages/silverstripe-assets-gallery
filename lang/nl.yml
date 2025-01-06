@@ -61,15 +61,19 @@ nl:
     ANYONE: Iedereen
     EDITHEADER: 'Wie kan het bestand bewerken?'
     EDITORGROUPS: 'Groepen met bewerkrechten'
+    EDITORMEMBERS: Bewerkers
     FILENAME: Bestandsnaam
     FOLDERLOCATION: Locatie
     INHERIT: 'Overnemen van bovenliggende map'
     LOGGED_IN: 'Ingelogde bezoekers'
     ONLY_GROUPS: 'Alleen deze groepen (selecteer)'
+    ONLY_MEMBERS: 'Alleen deze gebruikers (selecteer)'
     ROOTNAME: '(Bovenste niveau)'
     SAVE: Opslaan
     SAVED: Opgeslagen
+    SHOWINSEARRCH: 'Tonen in zoeken?'
     VIEWERGROUPS: 'Groepen met bekijkrechten'
+    VIEWERMEMBERS: Bekijkers
   SilverStripe\AssetAdmin\Forms\FileFormFactory:
     DOWNLOAD_FILE: 'Download bestand'
     INSERT_LINK: 'Link naar bestand'
@@ -96,7 +100,7 @@ nl:
   SilverStripe\AssetAdmin\Forms\RemoteFileFormFactory:
     AddMedia: 'Media toevoegen'
     Cancel: Annuleren
-    ERROR_ABSOLUTE: 'Alleen volledige URL''s kunnen worden gebruikt'
+    ERROR_ABSOLUTE: "Alleen volledige URL's kunnen worden gebruikt"
     ERROR_EMBED: 'Met deze URL is geen embed te genereren'
     ERROR_HOSTNAME: 'Deze hostnaam is niet toegestaan'
     ERROR_PORT: 'Deze poort is niet toegestaan'
