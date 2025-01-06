@@ -435,7 +435,10 @@ class AssetAdmin extends AssetAdminOpen implements PermissionProvider
         }
         $ids = $this->getPostedJsonValue($request, 'ids');
         $folderID = $this->getPostedJsonValue($request, 'folderID');
-        $folder = $this->getFileByID($folderID, true, 400);
+        $folder = null;
+        if ($folderID !== 0) {
+            $folder = $this->getFileByID($folderID, true, 400);
+        }
         $files = $this->getFilesByIDs($ids, true, 400);
         foreach ($files as $file) {
             if (!$file->canEdit()) {
@@ -443,7 +446,7 @@ class AssetAdmin extends AssetAdminOpen implements PermissionProvider
             }
         }
         foreach ($files as $file) {
-            $file->ParentID = $folder->ID;
+            $file->ParentID = $folder ? $folder->ID : 0;
             $file->write();
         }
         return $this->jsonSuccess(204);
