@@ -135,6 +135,10 @@ class GalleryItem extends Component {
       thumbnailClassNames.push('gallery-item__thumbnail--no-preview');
     }
 
+    if (this.props.item.type === 'folder') {
+      thumbnailClassNames.push('gallery-item__thumbnail--folder');
+    }
+
     // Check loading status of thumbnail
     switch (this.props.loadState) {
       // Show loading indicator for preloading images
@@ -603,10 +607,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 const ConnectedGalleryItem = connect(mapStateToProps, mapDispatchToProps)(GalleryItem);
-const type = 'GalleryItem';
 
-const File = createSelectable(draggable(type)(ConnectedGalleryItem));
-const Folder = createSelectable(droppable(type)(File));
+const File = createSelectable(draggable(ConnectedGalleryItem));
+const Folder = createSelectable(droppable(File));
 export {
   GalleryItem as Component,
   Folder,

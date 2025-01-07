@@ -4,7 +4,8 @@ Displays a file/folder as a thumbnail with relevant actions.
 
 ## Example
 ```js
-<GalleryItem item={{id: 2}} selectable={true} />
+<GalleryItem item={{id: 2, exists: true, type: 'file', category: 'document'}} selectable={true} />
+<GalleryItem item={{id: 2, exists: true, type: 'folder', category: 'folder'}} selectable={true} />
 ```
 
 ## Properties
@@ -24,38 +25,36 @@ Displays a file/folder as a thumbnail with relevant actions.
 
 # draggable HOC
 
-Helps apply react-dnd to Files, so that the file can interact with dragging.
+Helps apply drag-and-drop functionality to Files, so that the file can interact with dragging.
 
 ## Example
 
 ```js
-const draggableComponent = draggable('Item')(Component);
+const draggableComponent = draggable(Component);
 ```
 
 ## Properties
-* `item` (object) (required): File details to display for.
-* `onDrag` (function): Callback for when the item is starting or ending being dragged.
-* `selectedFiles` (array): A list of ids that have been selected.
+
+* `item` (object) (required): File details to display for. Minimally needs a unique `id` property.
+* `canDrag` (bool): Whether this item can be dragged right now. Assumed `true` if missing.
 
 # droppable HOC
 
-Helps apply react-dnd to Folders, so that a file could be dragged on it with the proper interactive response.
+Helps apply drag-and-drop functionality to Folders, so that a file could be dragged on it with the proper interactive response.
 
 ## Example
 
 ```js
-const droppableComponent = droppable('Item')(Component);
+const droppableComponent = droppable(Component);
 ```
 
 ## Properties
 
-* `item` (object) (required): File details to display for.
+* `item` (object) (required): File details to display for. Minimally needs a unique `id` property.
 
 # GalleryItemDragLayer Component
 
-The custom preview item to show instead of the HTML5 default preview.
-
-__NOTE__: This does lose some nice functionality, like the "slingshot back" to place effect when dropping onto nothing droppable.
+The custom preview item to show instead of just dragging the existing file/folder presentation
 
 ## Example
 
@@ -64,6 +63,6 @@ __NOTE__: This does lose some nice functionality, like the "slingshot back" to p
 ```
 
 ## Properties
-* `item` (object): File details to display for.
-* `offset` (object): Co-ordinates for the item's offset.
-* `isDragging` (boolean): Is an item currently being dragged.
+
+* `draggingItemProps` (object) (required): Props for the item being dragged.
+* `draggingItems` (array) (required): Array of IDs of all items being dragged (includes selected items).

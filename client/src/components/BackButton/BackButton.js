@@ -54,4 +54,4 @@ BackButton.propTypes = {
 
 export { BackButton as Component };
 
-export default droppable('GalleryItem')(BackButton);
+export default droppable(BackButton);
